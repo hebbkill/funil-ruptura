@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Ruptura — Hebber Magalhães</title>
+  <meta name="description" content="O que vou te mostrar aqui vai mudar como você enxerga sua própria desistência.">
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Overlays visuais -->
+<div class="scanline-overlay"></div>
+<div class="grid-bg"></div>
+
+<!-- Partículas de fundo -->
+<canvas id="particles-canvas"></canvas>
+
+<div class="intro-wrap">
+
+  <!-- Badge topo -->
+  <div class="secure-badge" style="animation: fade-up 0.8s ease both;">
+    <span class="dot"></span>
+    <span>Conexão Segura Estabelecida</span>
+  </div>
+
+  <!-- Corpo central -->
+  <div class="intro-body">
+    <div class="intro-content">
+
+      <h1 style="font-family: 'Orbitron', sans-serif;" class="delay-1">
+        Você já sabe o que precisa fazer. Só que todo dia,
+        <span class="highlight">escolhe não fazer.</span>
+      </h1>
+
+      <div class="intro-divider delay-2"></div>
+
+      <p class="subline delay-3">
+        Não é falta de informação. Você já tem informação demais. O que você perdeu foi a <strong>conexão com você mesmo.</strong>
+      </p>
+
+      <!-- Indicador de áudio -->
+      <div class="audio-hint delay-4">
+        <div class="waveform">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <p>Experiência imersiva. Use fones de ouvido.</p>
+      </div>
+
+      <a href="quiz.html" class="btn-iniciar delay-5">
+        <span>⚡ QUERO ROMPER COM ISSO</span>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- Rodapé -->
+  <div class="exp-label">
+    Experiência Interativa &nbsp;·&nbsp; A Ruptura
+  </div>
+
+</div>
+
+<!-- Áudio ambiente (silencioso por padrão, ativa ao clicar) -->
+<audio id="ambient-audio" loop preload="none">
+  <!-- Substitua pelo URL de um áudio ambient/instrumental de sua escolha -->
+  <!-- Exemplo: <source src="audio/ambient.mp3" type="audio/mpeg"> -->
+</audio>
+
+<script>
+  /* ── Partículas ── */
+  const canvas = document.getElementById('particles-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function createParticle() {
+    return {
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      size: Math.random() * 1.5 + 0.3,
+      opacity: Math.random() * 0.4 + 0.05,
+      vx: (Math.random() - 0.5) * 0.15,
+      vy: (Math.random() - 0.5) * 0.15,
+    };
+  }
+
+  for (let i = 0; i < 80; i++) particles.push(createParticle());
+
+  function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < 0) p.x = canvas.width;
+      if (p.x > canvas.width) p.x = 0;
+      if (p.y < 0) p.y = canvas.height;
+      if (p.y > canvas.height) p.y = 0;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(0, 200, 255, ${p.opacity})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(animateParticles);
+  }
+  animateParticles();
+
+  /* ── Áudio ao clicar em INICIAR ── */
+  document.querySelector('.btn-iniciar').addEventListener('click', function(e) {
+    const audio = document.getElementById('ambient-audio');
+    if (audio.src) {
+      audio.volume = 0.3;
+      audio.play().catch(() => {});
+    }
+  });
+</script>
+
+</body>
+</html>

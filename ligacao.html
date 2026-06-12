@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chamada Recebida — A Ruptura</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    @keyframes shake {
+      0%   { transform: translate(0, 0) rotate(0deg); }
+      10%  { transform: translate(-2px, -2px) rotate(-1deg); }
+      20%  { transform: translate(2px, 2px) rotate(1deg); }
+      30%  { transform: translate(-2px, 2px) rotate(-1deg); }
+      40%  { transform: translate(2px, -2px) rotate(1deg); }
+      50%  { transform: translate(-2px, -2px) rotate(-1deg); }
+      60%  { transform: translate(2px, 2px) rotate(1deg); }
+      70%  { transform: translate(-2px, 2px) rotate(-1deg); }
+      80%  { transform: translate(2px, -2px) rotate(1deg); }
+      90%  { transform: translate(-2px, -2px) rotate(-1deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
+    }
+    .call-avatar.ringing.active-ring {
+      animation: shake 0.5s infinite;
+    }
+  </style>
+</head>
+<body>
+
+<div class="scanline-overlay"></div>
+<div class="grid-bg"></div>
+<canvas id="particles-canvas"></canvas>
+
+<!-- Overlay de recusa: texto simples, some após 2s -->
+<div class="refuse-overlay" id="refuse-overlay">
+  <p class="refuse-text">Você sempre recusa.</p>
+</div>
+
+<div class="phone-screen incoming" id="phone-screen">
+
+  <div class="call-top">
+    <p class="call-status">Chamada recebida</p>
+
+    <div class="call-avatar ringing">
+      <img src="img-fracasso.png" alt="Você — Daqui a 5 anos" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+    </div>
+
+    <h1 class="call-name">VOCÊ &mdash; DAQUI A 5 ANOS</h1>
+    <p class="call-subtitle">A versão que você ainda pode virar...</p>
+  </div>
+
+  <div></div>
+
+  <div class="call-bottom-incoming">
+    <div class="call-btn-wrap">
+      <button class="btn-decline" id="btn-recusar">📵</button>
+      <span class="btn-label">Recusar</span>
+    </div>
+    <div class="call-btn-wrap">
+      <button class="btn-answer" id="btn-atender">📞</button>
+      <span class="btn-label">Atender</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- Toque: áudio real -->
+<audio id="ringtone-audio" preload="auto" loop autoplay>
+  <source src="assets/audio/toque-chamada.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  /* ── Partículas douradas ── */
+  const canvas = document.getElementById('particles-canvas');
+  const ctx    = canvas.getContext('2d');
+  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+  const particles = Array.from({length: 60}, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    size: Math.random() * 1.2 + 0.2,
+    opacity: Math.random() * 0.25 + 0.04,
+    vx: (Math.random() - 0.5) * 0.1,
+    vy: (Math.random() - 0.5) * 0.1,
+  }));
+  (function anim() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      p.x = (p.x + p.vx + canvas.width)  % canvas.width;
+      p.y = (p.y + p.vy + canvas.height) % canvas.height;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(201,162,39,${p.opacity})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(anim);
+  })();
+
+  /* ── Toque e vibração do avatar ── */
+  const ringtone = document.getElementById('ringtone-audio');
+  const avatar   = document.querySelector('.call-avatar');
+
+  function playRingtone() {
+    if (ringtone && ringtone.paused) {
+      ringtone.play()
+        .then(() => { avatar.classList.add('active-ring'); })
+        .catch(err => { console.log("Autoplay bloqueado. Aguardando interação.", err); });
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', playRingtone);
+  window.addEventListener('click',      playRingtone, { once: true });
+  window.addEventListener('touchstart', playRingtone, { once: true });
+
+  if (ringtone) {
+    ringtone.addEventListener('play',  () => avatar.classList.add('active-ring'));
+    ringtone.addEventListener('pause', () => avatar.classList.remove('active-ring'));
+  }
+
+  /* ── Recusar ── */
+  document.getElementById('btn-recusar').addEventListener('click', () => {
+    if (ringtone) ringtone.pause();
+    const overlay = document.getElementById('refuse-overlay');
+    overlay.classList.add('active');
+    setTimeout(() => { overlay.classList.remove('active'); }, 2000);
+  });
+
+  /* ── Atender ── */
+  document.getElementById('btn-atender').addEventListener('click', () => {
+    if (ringtone) ringtone.pause();
+    window.location.href = 'chamada.html';
+  });
+</script>
+
+</body>
+</html>

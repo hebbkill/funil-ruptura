@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fase 2: As Perguntas Que Ninguém Faz — A Ruptura</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="lesson-wrap">
+
+  <div class="secure-badge">
+    <span class="dot"></span>
+    <span>Fase liberada — assista com atenção</span>
+  </div>
+
+  <div class="container" style="padding-top: 0;">
+
+    <div class="lesson-header">
+      <p class="lesson-label">Fase 2 de 3 &nbsp;·&nbsp; A Ruptura</p>
+      <h1 class="lesson-title">As Perguntas Que Ninguém Faz</h1>
+      <p class="lesson-premise" style="font-size: 0.95rem; line-height: 1.6;">
+        Esquece os mil especialistas e os mil caminhos. Existem perguntas que, quando você responde com honestidade, te reconectam com o que você realmente quer — e tornam impossível continuar vivendo no piloto automático. Foram elas que me viraram do avesso.
+      </p>
+    </div>
+
+    <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; border: 1px solid var(--border-gold);">
+      <div id="player" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></div>
+      
+      <div id="play-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.6); cursor: pointer; z-index: 10; transition: background 0.3s;">
+        <div id="play-icon" style="width: 80px; height: 80px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(201,162,39,0.5); transition: opacity 0.3s; color: #000; font-size: 2rem; padding-left: 6px;">▶</div>
+      </div>
+
+      <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 5px; background: rgba(255,255,255,0.1); z-index: 10;">
+        <div id="progress-fill" style="height: 100%; width: 0%; background: var(--gold); transition: width 0.1s linear;"></div>
+      </div>
+    </div>
+
+    <div class="lesson-bridge">
+      <p>
+        Você acabou de se reconectar. Agora deixa eu te mostrar o que fazer com esse combustível.
+      </p>
+    </div>
+
+    <div class="lesson-nav">
+      <a href="fase3.html" class="btn-primary" style="font-size: 0.85rem;">QUERO O CAMINHO COMPLETO → FASE 3</a>
+    </div>
+
+  </div>
+
+  <div class="footer" style="margin-top: 80px;">
+    &copy; 2025 A Ruptura &nbsp;·&nbsp; @hb.magalhaes
+  </div>
+
+</div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+  var player;
+  var videoId = 'FSvEecKltVA'; // Fase 2
+  var duration = 306; // 5m06s
+  var isPlaying = false;
+
+  function onYouTubeIframeAPIReady() {
+    player = new YT.Player('player', {
+      height: '100%',
+      width: '100%',
+      videoId: videoId,
+      playerVars: {
+        'autoplay': 0, 'controls': 0, 'disablekb': 1, 'fs': 0,
+        'modestbranding': 1, 'rel': 0, 'showinfo': 0, 'iv_load_policy': 3,
+        'playsinline': 1
+      },
+      events: {
+        'onStateChange': onPlayerStateChange
+      }
+    });
+  }
+
+  document.getElementById('play-overlay').addEventListener('click', function() {
+    if (!player || typeof player.playVideo !== 'function') return;
+    if (isPlaying) {
+      player.pauseVideo();
+    } else {
+      player.playVideo();
+    }
+  });
+
+  var progressInterval;
+  function onPlayerStateChange(event) {
+    var overlayIcon = document.getElementById('play-icon');
+    var overlayBg = document.getElementById('play-overlay');
+    
+    if (event.data == YT.PlayerState.PLAYING) {
+      isPlaying = true;
+      overlayBg.style.background = 'transparent';
+      overlayIcon.style.opacity = '0';
+      progressInterval = setInterval(updateProgressBar, 100);
+    } else {
+      isPlaying = false;
+      overlayBg.style.background = 'rgba(0,0,0,0.4)';
+      overlayIcon.style.opacity = '1';
+      overlayIcon.textContent = '▶';
+      overlayIcon.style.paddingLeft = '6px';
+      clearInterval(progressInterval);
+    }
+  }
+
+  function updateProgressBar() {
+    if (!player || typeof player.getCurrentTime !== 'function') return;
+    var currentTime = player.getCurrentTime();
+    
+    if (currentTime >= duration - 1) {
+      player.pauseVideo();
+      document.getElementById('progress-fill').style.width = '100%';
+      return;
+    }
+    
+    var progress = currentTime / duration;
+    var fakeProgress = 1 - Math.pow(1 - progress, 3);
+    document.getElementById('progress-fill').style.width = (fakeProgress * 100) + '%';
+  }
+</script>
+
+</body>
+</html>

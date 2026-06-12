@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conexão — A Ruptura</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="scanline-overlay"></div>
+<div class="grid-bg"></div>
+
+<canvas id="particles-canvas"></canvas>
+
+<div class="intro-wrap">
+  
+  <div class="secure-badge" style="animation: fade-up 0.8s ease both; border-color: #d4af37; color: #d4af37;">
+    <span class="dot" style="background: #d4af37; box-shadow: 0 0 8px #d4af37, 0 0 16px #d4af37;"></span>
+    <span>CONEXÃO ESTABELECIDA</span>
+  </div>
+
+  <div class="intro-body">
+    <div class="intro-content">
+
+      <h1 style="font-family: 'Orbitron', sans-serif;" class="delay-1">
+        Suas respostas dizem mais do que você imagina.
+      </h1>
+
+      <div class="intro-divider delay-2"></div>
+
+      <p class="subline delay-3" style="text-align: left; line-height: 1.8;">
+        Você acabou de admitir, em poucos segundos, o que a maioria leva anos pra encarar: o problema nunca foi falta de capacidade. É que você se desconectou de você mesmo — e foi se enchendo de barulho de fora pra não ouvir o que tava faltando dentro.
+        <br><br>
+        O primeiro passo pra romper é parar de fingir que tá tudo bem. Você acabou de dar esse passo.
+      </p>
+
+      <div class="audio-hint delay-4" style="margin-top: 32px;">
+        <div class="waveform">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <p style="color: var(--white); font-weight: 700;">🔊 O que vem a seguir não é um vídeo. É um espelho. Coloca o som no máximo.</p>
+      </div>
+
+      <a href="ligacao.html" class="btn-iniciar delay-5" style="border-color: #d4af37; color: #d4af37; box-shadow: 0 0 16px rgba(212, 175, 55, 0.2);">
+        <span>⚡ ESTOU PRONTO</span>
+      </a>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+  /* ── Partículas ── */
+  const canvas = document.getElementById('particles-canvas');
+  const ctx = canvas.getContext('2d');
+  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+  const particles = Array.from({length: 60}, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    size: Math.random() * 1.5 + 0.3,
+    opacity: Math.random() * 0.4 + 0.05,
+    vx: (Math.random() - 0.5) * 0.15,
+    vy: (Math.random() - 0.5) * 0.15,
+  }));
+  (function anim() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      p.x = (p.x + p.vx + canvas.width) % canvas.width;
+      p.y = (p.y + p.vy + canvas.height) % canvas.height;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(212, 175, 55, ${p.opacity})`; // Partículas douradas para combinar com a conexão
+      ctx.fill();
+    });
+    requestAnimationFrame(anim);
+  })();
+</script>
+
+</body>
+</html>

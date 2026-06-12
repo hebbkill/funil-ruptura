@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "caderno-digital",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["C:\\tmp\\serve-caderno.js"],
+      "port": 3456
+    },
+    {
+      "name": "ruptura",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["C:\\tmp\\serve-ruptura.js"],
+      "port": 4174
+    }
+  ]
+}

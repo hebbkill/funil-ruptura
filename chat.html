@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mensagens — A Ruptura</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── Reset e base WhatsApp ── */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      background: #111b21;
+      font-family: 'Inter', -apple-system, sans-serif;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ── Header (barra verde do WhatsApp) ── */
+    .wa-header {
+      background: #202c33;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+      position: relative;
+      z-index: 10;
+    }
+    .wa-back {
+      color: #aebac1;
+      font-size: 1.2rem;
+      margin-right: -4px;
+    }
+    .wa-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: #2a3942;
+    }
+    .wa-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .wa-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    .wa-name {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e9edef;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .wa-status {
+      font-size: 0.78rem;
+      color: #8696a0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .wa-status.typing-anim {
+      color: #00a884; /* verde WhatsApp para "digitando..." */
+    }
+    .wa-actions {
+      display: flex;
+      gap: 20px;
+      color: #aebac1;
+      font-size: 1.2rem;
+    }
+
+    /* ── Área de mensagens (fundo com padrão WhatsApp) ── */
+    .wa-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 5%;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      background: #0b141a;
+      background-image: url("data:image/svg+xml,%3Csvg width='560' height='560' viewBox='0 0 560 560' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M280 280c0 0 0 0 0 0' fill='none'/%3E%3C/svg%3E");
+      /* Padrão de bolinhas sutil, imita o fundo do WA */
+      background-image: radial-gradient(circle, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    .wa-body::-webkit-scrollbar { width: 6px; }
+    .wa-body::-webkit-scrollbar-thumb { background: #2a3942; border-radius: 3px; }
+
+    /* ── Balão de mensagem (recebida = esquerda) ── */
+    .wa-msg-row {
+      display: flex;
+      justify-content: flex-start;
+      padding: 1px 0;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .wa-msg-row.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .wa-bubble {
+      background: #202c33;
+      color: #e9edef;
+      font-size: 0.93rem;
+      line-height: 1.5;
+      padding: 8px 9px 8px 9px;
+      border-radius: 0 8px 8px 8px;
+      max-width: min(78%, 380px);
+      position: relative;
+      box-shadow: 0 1px 0.5px rgba(11,20,26,0.13);
+      word-wrap: break-word;
+    }
+    /* Rabinho do balão (esquerda) */
+    .wa-bubble::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -8px;
+      width: 0;
+      height: 0;
+      border-top: 8px solid #202c33;
+      border-left: 8px solid transparent;
+    }
+    .wa-time {
+      display: inline-block;
+      font-size: 0.68rem;
+      color: #8696a0;
+      float: right;
+      margin-left: 8px;
+      margin-top: 3px;
+      white-space: nowrap;
+    }
+
+    /* ── Indicador "digitando" (3 bolinhas) ── */
+    .wa-typing-row {
+      display: flex;
+      justify-content: flex-start;
+      padding: 4px 0;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .wa-typing-row.active { opacity: 1; }
+    .wa-typing-bubble {
+      background: #202c33;
+      border-radius: 0 8px 8px 8px;
+      padding: 10px 14px;
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      box-shadow: 0 1px 0.5px rgba(11,20,26,0.13);
+      position: relative;
+    }
+    .wa-typing-bubble::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -8px;
+      width: 0;
+      height: 0;
+      border-top: 8px solid #202c33;
+      border-left: 8px solid transparent;
+    }
+    .wa-dot {
+      width: 7px;
+      height: 7px;
+      background: #8696a0;
+      border-radius: 50%;
+      animation: wa-bounce 1.4s infinite ease-in-out both;
+    }
+    .wa-dot:nth-child(1) { animation-delay: -0.32s; }
+    .wa-dot:nth-child(2) { animation-delay: -0.16s; }
+    .wa-dot:nth-child(3) { animation-delay: 0s; }
+    @keyframes wa-bounce {
+      0%, 80%, 100% { transform: scale(0.7); opacity: 0.5; }
+      40%           { transform: scale(1);   opacity: 1; }
+    }
+
+    /* ── Separador de data ── */
+    .wa-date-divider {
+      display: flex;
+      justify-content: center;
+      margin: 12px 0 8px;
+    }
+    .wa-date-pill {
+      background: #182229;
+      color: #8696a0;
+      font-size: 0.72rem;
+      padding: 5px 12px;
+      border-radius: 8px;
+      box-shadow: 0 1px 0.5px rgba(11,20,26,0.13);
+    }
+
+    /* ── Barra de input fake (visual) ── */
+    .wa-input-bar {
+      background: #202c33;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .wa-input-fake {
+      flex: 1;
+      background: #2a3942;
+      border-radius: 24px;
+      padding: 10px 16px;
+      color: #8696a0;
+      font-size: 0.93rem;
+    }
+    .wa-send-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #00a884;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .wa-input-icon {
+      color: #8696a0;
+      font-size: 1.4rem;
+    }
+
+    /* ── CTA final ── */
+    .wa-cta-wrap {
+      padding: 12px 16px 20px;
+      background: #111b21;
+      flex-shrink: 0;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.5s ease 0.3s, transform 0.5s ease 0.3s;
+    }
+    .wa-cta-wrap.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .wa-cta-btn {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      background: #00a884;
+      color: #fff;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(0,168,132,0.3);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Header estilo WhatsApp ── -->
+<div class="wa-header">
+  <div class="wa-back">‹</div>
+  <div class="wa-avatar">
+    <img src="img-sucesso.png" alt="Você — Do Outro Lado">
+  </div>
+  <div class="wa-info">
+    <div class="wa-name">Você — Do Outro Lado</div>
+    <div class="wa-status" id="wa-status">online</div>
+  </div>
+  <div class="wa-actions">
+    <span>📹</span>
+    <span>📞</span>
+    <span>⋮</span>
+  </div>
+</div>
+
+<!-- ── Corpo das mensagens ── -->
+<div class="wa-body" id="wa-body">
+
+  <div class="wa-date-divider">
+    <div class="wa-date-pill">Hoje</div>
+  </div>
+
+  <!-- Mensagens inseridas pelo JS -->
+
+  <div class="wa-typing-row" id="wa-typing">
+    <div class="wa-typing-bubble">
+      <div class="wa-dot"></div>
+      <div class="wa-dot"></div>
+      <div class="wa-dot"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Input fake (visual apenas) ── -->
+<div class="wa-input-bar">
+  <span class="wa-input-icon">😊</span>
+  <div class="wa-input-fake">Mensagem</div>
+  <span class="wa-input-icon">📎</span>
+  <div class="wa-send-btn">🎤</div>
+</div>
+
+<!-- ── CTA final ── -->
+<div class="wa-cta-wrap" id="wa-cta">
+  <a href="fase1.html" class="wa-cta-btn">
+    ENTRAR NA FASE 1 →
+  </a>
+</div>
+
+<script>
+  // Gera horário atual formatado
+  function getTime() {
+    const now = new Date();
+    return now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+  }
+
+  const messages = [
+    { text: "Assustou?", delay: 800 },
+    { text: "Calma. Respira.", delay: 1500 },
+    { text: "Aquela ligação não foi pra te derrubar.", delay: 2000 },
+    { text: "Foi pra te acordar.", delay: 1500 },
+    { text: "Agora deixa eu me apresentar:", delay: 2000 },
+    { text: "eu sou a versão que atendeu.", delay: 2000 },
+    { text: "A que olhou pra essa voz e disse: hoje não.", delay: 2500 },
+    { text: "Você e eu sabemos a verdade.", delay: 2000 },
+    { text: "Não te falta informação. Te falta direção.", delay: 2500 },
+    { text: "Eu encontrei a minha em 3 fases.", delay: 2000 },
+    { text: "E deixei elas gravadas pra você.", delay: 2000 },
+    { text: "Não são aula de produtividade.", delay: 2000 },
+    { text: "São o caminho de volta pra você mesmo.", delay: 2500 },
+    { text: "Fase 1 libera agora.", delay: 1500 },
+    { text: "É curta. Você já passou mais tempo rolando o feed hoje.", delay: 3000 },
+    { text: "Mas só começa se for pra atravessar as três.", delay: 2500 },
+    { text: "Quem rompe pela metade, volta pro mesmo lugar.", delay: 2500 },
+    { text: "Bora pra Fase 1?", delay: 1500 }
+  ];
+
+  const waBody    = document.getElementById('wa-body');
+  const waTyping  = document.getElementById('wa-typing');
+  const waCta     = document.getElementById('wa-cta');
+  const waStatus  = document.getElementById('wa-status');
+
+  let currentMsg = 0;
+
+  function scrollBottom() {
+    waBody.scrollTop = waBody.scrollHeight;
+  }
+
+  function showTyping() {
+    waBody.appendChild(waTyping);
+    waBody.appendChild(waCta); // mantém no fim
+    waTyping.classList.add('active');
+    waStatus.textContent = 'digitando...';
+    waStatus.classList.add('typing-anim');
+    scrollBottom();
+  }
+
+  function hideTyping() {
+    waTyping.classList.remove('active');
+    waStatus.textContent = 'online';
+    waStatus.classList.remove('typing-anim');
+  }
+
+  function appendMsg(text) {
+    const row = document.createElement('div');
+    row.className = 'wa-msg-row';
+
+    const bubble = document.createElement('div');
+    bubble.className = 'wa-bubble';
+    bubble.innerHTML = `${text}<span class="wa-time">${getTime()}</span>`;
+
+    row.appendChild(bubble);
+    waBody.insertBefore(row, waTyping);
+
+    void row.offsetWidth;
+    row.classList.add('visible');
+    scrollBottom();
+  }
+
+  function next() {
+    if (currentMsg >= messages.length) {
+      hideTyping();
+      setTimeout(() => {
+        waCta.classList.add('visible');
+        scrollBottom();
+      }, 400);
+      return;
+    }
+    const msg = messages[currentMsg];
+    showTyping();
+    setTimeout(() => {
+      hideTyping();
+      appendMsg(msg.text);
+      currentMsg++;
+      setTimeout(next, 500);
+    }, msg.delay);
+  }
+
+  setTimeout(next, 700);
+</script>
+
+</body>
+</html>

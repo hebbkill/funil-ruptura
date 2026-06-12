@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:agentecode.com)",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "mcp__Claude_in_Chrome__browser_batch",
+      "mcp__Claude_in_Chrome__get_page_text",
+      "mcp__Claude_in_Chrome__read_page",
+      "Bash(python -c \"import playwright; print\\('playwright ok'\\)\")",
+      "Bash(python -c \"import weasyprint; print\\('weasyprint ok'\\)\")",
+      "Bash(python -c \"import subprocess; r = subprocess.run\\(['playwright', '--version'], capture_output=True, text=True\\); print\\(r.stdout\\)\")",
+      "PowerShell(python3 --version 2>&1)",
+      "PowerShell(py --version 2>&1)",
+      "PowerShell(node --version 2>&1)",
+      "PowerShell(npx playwright --version 2>&1)",
+      "PowerShell($f = \"C:\\\\Users\\\\hebbe\\\\Desktop\\\\Hebber\\\\IA\\\\Finil Magnético\\\\Caderno_da_Ruptura_Completo.pdf\"; \"{0:N2} MB — {1} páginas estimadas\" -f \\(\\(Get-Item $f\\).Length / 1MB\\), \"22\")",
+      "PowerShell($src = \"C:\\\\Users\\\\hebbe\\\\Desktop\\\\Hebber\\\\IA\\\\Finil Magnético\"; $dst = \"C:\\\\Users\\\\hebbe\\\\Desktop\\\\Hebber\\\\IA\\\\Caderno\"; Copy-Item \"$src\\\\caderno.html\" $dst; Copy-Item \"$src\\\\gerar-pdf.js\" $dst; Copy-Item \"$src\\\\package.json\" $dst; Copy-Item \"$src\\\\package-lock.json\" $dst; Write-Host \"Arquivos copiados.\")"
+    ]
+  }
+}

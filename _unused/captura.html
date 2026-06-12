@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acesso Gratuito — A Ruptura</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<canvas id="particles-canvas"></canvas>
+
+<div class="capture-wrap">
+
+  <div class="secure-badge">
+    <span class="dot"></span>
+    <span>Conexão Segura Estabelecida</span>
+  </div>
+
+  <div class="capture-body">
+    <div class="capture-content">
+
+      <div class="capture-box">
+        <div class="corner-frame tl"></div>
+        <div class="corner-frame tr"></div>
+        <div class="corner-frame bl"></div>
+        <div class="corner-frame br"></div>
+
+        <p class="lesson-label">Você atendeu.</p>
+
+        <h1>
+          A maioria teria<br>
+          <span class="highlight">desligado.</span>
+        </h1>
+
+        <p class="lead">
+          Isso já diz algo sobre você.<br><br>
+          As 3 aulas gratuitas estão prontas.
+          Deixa seu email e eu te mando o acesso agora.
+        </p>
+
+        <form
+          name="captura"
+          method="POST"
+          action="/obrigado.html"
+          netlify
+          netlify-honeypot="bot-field"
+          class="capture-form"
+        >
+          <input type="hidden" name="form-name" value="captura">
+          <input type="hidden" name="bot-field">
+
+          <input
+            type="text"
+            name="nome"
+            placeholder="Seu primeiro nome"
+            required
+            autocomplete="given-name"
+          >
+
+          <input
+            type="email"
+            name="email"
+            placeholder="Seu melhor email"
+            required
+            autocomplete="email"
+          >
+
+          <button type="submit" class="btn-cta">
+            ⚡ &nbsp; Quero as 3 aulas gratuitas
+          </button>
+
+          <p class="form-note">Sem spam. Só o que importa.</p>
+        </form>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; 2025 A Ruptura &nbsp;·&nbsp; @hb.magalhaes
+  </div>
+
+</div>
+
+<script>
+  const canvas = document.getElementById('particles-canvas');
+  const ctx = canvas.getContext('2d');
+  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+  const particles = Array.from({length: 60}, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    size: Math.random() * 1.2 + 0.3,
+    opacity: Math.random() * 0.25 + 0.04,
+    vx: (Math.random() - 0.5) * 0.1,
+    vy: (Math.random() - 0.5) * 0.1,
+  }));
+  (function anim() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      p.x = (p.x + p.vx + canvas.width) % canvas.width;
+      p.y = (p.y + p.vy + canvas.height) % canvas.height;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(0, 200, 255, ${p.opacity})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(anim);
+  })();
+</script>
+
+</body>
+</html>

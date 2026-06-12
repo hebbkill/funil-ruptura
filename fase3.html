@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fase 3: A Ruptura — A Ruptura</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="lesson-wrap">
+
+  <div class="secure-badge">
+    <span class="dot"></span>
+    <span>Fase liberada — assista com atenção</span>
+  </div>
+
+  <div class="container" style="padding-top: 0;">
+
+    <div class="lesson-header">
+      <p class="lesson-label">Fase 3 de 3 &nbsp;·&nbsp; A Ruptura</p>
+      <h1 class="lesson-title" style="font-size: 1.8rem;">A Ruptura — Do paralisado ao reconectado</h1>
+      <p class="lesson-premise" style="font-size: 0.95rem; line-height: 1.6;">
+        Você viu por que travou e se reconectou com o que quer. Mas transformar isso em uma virada real, sustentada, dia após dia — exige o caminho completo. Foi exatamente esse caminho que eu trilhei.
+      </p>
+    </div>
+
+    <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; border: 1px solid var(--border-gold);">
+      <div id="player" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;"></div>
+      
+      <div id="play-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.6); cursor: pointer; z-index: 10; transition: background 0.3s;">
+        <div id="play-icon" style="width: 80px; height: 80px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(201,162,39,0.5); transition: opacity 0.3s; color: #000; font-size: 2rem; padding-left: 6px;">▶</div>
+      </div>
+
+      <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 5px; background: rgba(255,255,255,0.1); z-index: 10;">
+        <div id="progress-fill" style="height: 100%; width: 0%; background: var(--gold); transition: width 0.1s linear;"></div>
+      </div>
+    </div>
+
+    <div class="lesson-bridge" style="border-color: #d4af37; background: rgba(212, 175, 55, 0.05);">
+      <p>
+        Tudo que você viveu aqui foi o primeiro degrau: parar de fugir e se reconectar. Mas romper de verdade — e sustentar essa ruptura quando a voz sombria voltar a ligar — exige mais que um momento de clareza. Exige um processo, e alguém do lado. Foi isso que eu organizei dentro de A Ruptura. Não é promessa de vida fácil. É o mapa de uma virada real, pra quem decidiu parar de esperar e romper.
+      </p>
+    </div>
+
+    <div class="lesson-nav">
+      <!-- Aqui o botão leva para a página de vendas (ruptura.html) ou direto pro checkout se preferir. 
+           Como temos ruptura.html estruturada, vou redirecionar pra lá. O checkout fica lá. -->
+      <a href="ruptura.html" class="btn-cta" style="background: #d4af37; color: #000; padding: 20px 40px; font-size: 0.95rem;">
+        🔥 QUERO ENTRAR EM A RUPTURA
+      </a>
+    </div>
+
+  </div>
+
+  <div class="footer" style="margin-top: 80px;">
+    &copy; 2025 A Ruptura &nbsp;·&nbsp; @hb.magalhaes
+  </div>
+
+</div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+  var player;
+  var videoId = 'kcxuKTWWrW8'; // Fase 3
+  var duration = 230; // 3m50s
+  var isPlaying = false;
+
+  function onYouTubeIframeAPIReady() {
+    player = new YT.Player('player', {
+      height: '100%',
+      width: '100%',
+      videoId: videoId,
+      playerVars: {
+        'autoplay': 0, 'controls': 0, 'disablekb': 1, 'fs': 0,
+        'modestbranding': 1, 'rel': 0, 'showinfo': 0, 'iv_load_policy': 3,
+        'playsinline': 1
+      },
+      events: {
+        'onStateChange': onPlayerStateChange
+      }
+    });
+  }
+
+  document.getElementById('play-overlay').addEventListener('click', function() {
+    if (!player || typeof player.playVideo !== 'function') return;
+    if (isPlaying) {
+      player.pauseVideo();
+    } else {
+      player.playVideo();
+    }
+  });
+
+  var progressInterval;
+  function onPlayerStateChange(event) {
+    var overlayIcon = document.getElementById('play-icon');
+    var overlayBg = document.getElementById('play-overlay');
+    
+    if (event.data == YT.PlayerState.PLAYING) {
+      isPlaying = true;
+      overlayBg.style.background = 'transparent';
+      overlayIcon.style.opacity = '0';
+      progressInterval = setInterval(updateProgressBar, 100);
+    } else {
+      isPlaying = false;
+      overlayBg.style.background = 'rgba(0,0,0,0.4)';
+      overlayIcon.style.opacity = '1';
+      overlayIcon.textContent = '▶';
+      overlayIcon.style.paddingLeft = '6px';
+      clearInterval(progressInterval);
+    }
+  }
+
+  function updateProgressBar() {
+    if (!player || typeof player.getCurrentTime !== 'function') return;
+    var currentTime = player.getCurrentTime();
+    
+    if (currentTime >= duration - 1) {
+      player.pauseVideo();
+      document.getElementById('progress-fill').style.width = '100%';
+      return;
+    }
+    
+    var progress = currentTime / duration;
+    var fakeProgress = 1 - Math.pow(1 - progress, 3);
+    document.getElementById('progress-fill').style.width = (fakeProgress * 100) + '%';
+  }
+</script>
+
+</body>
+</html>

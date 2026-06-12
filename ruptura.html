@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Ruptura — Turma de Fundadores</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .hero-author {
+      font-size: 0.75rem;
+      color: var(--text-subtle);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .honest-block {
+      background: var(--bg-3);
+      border: 1px solid var(--border-cyan);
+      border-left: 3px solid var(--cyan);
+      padding: 28px 32px;
+      margin: 40px 0;
+    }
+    .honest-block p {
+      font-size: 1rem;
+      color: var(--text-muted);
+      line-height: 1.9;
+    }
+    .honest-block p + p { margin-top: 16px; }
+    
+    .escassez-badge {
+      display: inline-block;
+      background: rgba(212, 175, 55, 0.15);
+      border: 1px solid #d4af37;
+      color: #d4af37;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+      animation: pulse-dot 2s infinite;
+    }
+
+    .faq-item {
+      padding: 28px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .faq-item:first-child { border-top: 1px solid var(--border); }
+    .faq-q {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+    .faq-a {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+    }
+    .sticky-cta {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--bg);
+      border-top: 1px solid var(--border-cyan);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      z-index: 100;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+    }
+    .sticky-cta.visible { transform: translateY(0); }
+    .sticky-price {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--white);
+      white-space: nowrap;
+    }
+    .sticky-btn {
+      display: inline-block;
+      padding: 14px 32px;
+      background: #d4af37;
+      color: #000;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.2s;
+    }
+    .sticky-btn:hover { opacity: 0.88; }
+    @media (max-width: 480px) {
+      .sticky-cta { flex-direction: column; align-items: stretch; }
+      .sticky-price { text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="secure-badge">
+  <span class="dot"></span>
+  <span>Página segura — Inscrições abertas</span>
+</div>
+
+<!-- 1. ABERTURA -->
+<div class="sales-header">
+  <div class="container">
+    <p class="hero-author">Hebber Magalhães &nbsp;·&nbsp; @hb.magalhaes</p>
+    <div class="escassez-badge">Turma de Fundadores (15 Vagas)</div>
+    <h1 class="sales-title" style="font-family: 'Orbitron', sans-serif;">A Ruptura</h1>
+    <p class="sales-subtitle">
+      Você não precisa de mais um método. Você tem informação demais.<br>
+      A verdadeira virada não vem de fora — vem de se reconectar com quem você é.
+    </p>
+  </div>
+</div>
+
+<!-- 2. A VIRADA -->
+<div class="sales-section">
+  <div class="container">
+    <p class="section-label">A História Honesta</p>
+
+    <p class="sales-text">
+      Eu fui o cara que tinha sonhos enormes: vencer, dar uma vida melhor pra família, aposentar minha mãe. Mas eu não fazia nada por eles. Eu era cheio de vícios, procrastinava o dia inteiro e não dava orgulho a quem eu amo.
+    </p>
+    
+    <p class="sales-text">
+      E o pior: eu tentava. Lia os métodos de produtividade, consumia conteúdo de mil especialistas. Tentativas frustradas, descrença. O excesso de informação só serviu como desculpa para não olhar para dentro.
+    </p>
+
+    <p class="sales-text">
+      A virada não veio de uma técnica nova. Veio de responder perguntas. As perguntas certas. Quando você responde pra você mesmo, com honestidade visceral, é impossível continuar vivendo no piloto automático.
+    </p>
+
+    <div class="sales-highlight" style="border-color: var(--cyan);">
+      A Ruptura é o movimento de romper com a parte negativa que te paralisa e transformá-la em combustível.<br>
+      Mas o combustível só vem DEPOIS da reconexão.
+    </div>
+  </div>
+</div>
+
+<!-- 3. O QUE É -->
+<div class="sales-section">
+  <div class="container">
+    <p class="section-label">O que é A Ruptura</p>
+    
+    <p class="sales-text">
+      Não é um curso. É um processo de 30 dias com acompanhamento real focado em reconexão e ação.
+    </p>
+
+    <div class="layers-grid">
+      <div class="layer">
+        <p class="layer-num">Camada 01</p>
+        <h3 class="layer-title">O Processo de Reconexão</h3>
+        <p class="layer-desc">
+          As perguntas que me viraram do avesso. Forçam você a nomear seu inimigo e parar de fingir que está tudo bem.
+        </p>
+      </div>
+
+      <div class="layer">
+        <p class="layer-num">Camada 02</p>
+        <h3 class="layer-title">30 Dias Documentados</h3>
+        <p class="layer-desc">
+          A transformação não acontece num estalo. São 30 dias com o mapa prático de como pegar o combustível gerado pela dor e transformá-lo em execução diária.
+        </p>
+      </div>
+
+      <div class="layer">
+        <p class="layer-num">Camada 03</p>
+        <h3 class="layer-title">Acompanhamento & Revisões</h3>
+        <p class="layer-desc">
+          Isso não é um infoproduto que você joga na gaveta. Você não estará sozinho. Faremos revisões para garantir que a voz sombria não venceu de novo.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 4 e 5. O QUE NÃO É / PRA QUEM É -->
+<div class="sales-section">
+  <div class="container">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 40px;">
+      
+      <div>
+        <p class="section-label">O que NÃO É</p>
+        <ul class="not-list">
+          <li>Não é curso de produtividade com planilhas.</li>
+          <li>Não é mais conteúdo solto ou informação reciclada.</li>
+          <li>Não é fórmula mágica de ficar rico rápido.</li>
+          <li>Não é coaching genérico ou motivação barata.</li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="section-label">Para quem É</p>
+        <ul class="for-list">
+          <li>Sobrecarregados de informação, mas travados na ação.</li>
+          <li>Perdidos em meio a mil especialistas apontando caminhos diferentes.</li>
+          <li>Pessoas que têm sonhos reais, mas estão presas em vícios e distrações.</li>
+          <li>Cansados de tentar métodos e abandonar no meio.</li>
+        </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<!-- 6 e 7. PRA QUEM NÃO É / PROVA HONESTA -->
+<div class="sales-section">
+  <div class="container">
+    
+    <div class="honest-block">
+      <p style="font-family: 'Orbitron', sans-serif; font-weight: 700; color: var(--white); margin-bottom: 8px;">PARA QUEM NÃO É:</p>
+      <p>
+        Se você quer atalho, se você acha que pagar R$ 97 vai fazer o trabalho por você, ou se não topa olhar para as próprias feridas com honestidade — feche a página. A Ruptura não vai te ajudar.
+      </p>
+    </div>
+
+    <p class="section-label" style="margin-top: 60px;">A Prova Honesta</p>
+    <p class="sales-text">
+      Eu não vou te colocar dezenas de depoimentos forçados aqui. A prova sou eu mesmo. É a minha jornada documentada, os prints de antes e depois dos meus 30 dias de aplicação desse mesmo processo. Ninguém vai fazer isso por você. Mas funciona se você não fugir.
+    </p>
+
+  </div>
+</div>
+
+<!-- 8 e 9. PREÇO E ESCASSEZ -->
+<div class="sales-section">
+  <div class="container">
+    <p class="section-label">O Acesso</p>
+
+    <div class="price-box" id="preco" style="border-color: #d4af37;">
+
+      <div class="escassez-badge" style="margin-bottom: 16px;">Restam Poucas Vagas</div>
+      <p class="price-note" style="margin-bottom: 24px; color: var(--white);">Turma de Fundadores (Apenas 15 vagas no total)</p>
+
+      <p class="price-amount" style="font-family: 'Orbitron', sans-serif; color: #d4af37;">R$ 97</p>
+      <p class="price-note">Pagamento único · Acesso vitalício</p>
+
+      <ul class="price-features">
+        <li>Acompanhamento de perto na Turma de Fundadores</li>
+        <li>O Processo Completo de Reconexão (30 Dias)</li>
+        <li>Revisões guiadas para evitar desistência</li>
+      </ul>
+
+      <!-- LINK DO CHECKOUT AQUI -->
+      <a href="https://checkout.greenn.com.br/YOUR_LINK" class="btn-cta" id="btn-comprar" style="background: #d4af37; color: #000;">
+        🔥 QUERO ENTRAR EM A RUPTURA — R$ 97
+      </a>
+
+      <p class="guarantee">
+        E a garantia de 7 dias se aplica aqui também.
+      </p>
+
+    </div>
+  </div>
+</div>
+
+<!-- 10. GARANTIA ENQUADRADA -->
+<div class="sales-section">
+  <div class="container">
+    <p class="section-label">A Garantia de 7 Dias</p>
+    <p class="sales-text">
+      Você tem 7 dias para testar por dentro. Se pedir reembolso, eu devolvo.
+      <br><br>
+      Mas deixo o aviso honesto: se você entrar e desistir nesses 7 dias, é a voz sombria ganhando de novo. É você repetindo o mesmo padrão que te trouxe até essa página. A escolha final será sempre sua.
+    </p>
+  </div>
+</div>
+
+<!-- 11. FAQ -->
+<div class="sales-section">
+  <div class="container">
+    <p class="section-label">Perguntas Frequentes</p>
+
+    <div class="faq-item">
+      <p class="faq-q">E se eu já comprei dezenas de cursos e não terminei nenhum?</p>
+      <p class="faq-a">Então você está no lugar certo. A Ruptura não é um curso pra acumular informação. É um processo focado em te reconectar pra agir.</p>
+    </div>
+
+    <div class="faq-item">
+      <p class="faq-q">Por que apenas 15 vagas?</p>
+      <p class="faq-a">Porque eu estou focado em gerar transformação real nos fundadores. Não tenho como dar atenção e acompanhar a evolução de 100 pessoas de uma vez nesta etapa inicial.</p>
+    </div>
+
+    <div class="faq-item">
+      <p class="faq-q">Como acesso?</p>
+      <p class="faq-a">Logo após o pagamento na Greenn, o link de acesso chega direto no seu email.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- 12. CTA FINAL -->
+<div class="sales-section" style="text-align: center; padding: 80px 0;">
+  <div class="container">
+    <p class="section-label" style="text-align: center;">A Decisão Final</p>
+    <h2 style="font-family: 'Orbitron', sans-serif; font-size: clamp(1.3rem, 3vw, 2.2rem); color: var(--white); margin-bottom: 24px; line-height: 1.3;">
+      Você pode fechar essa aba<br>e continuar adiantando sua vida.
+    </h2>
+    <p class="sales-text" style="max-width: 480px; margin: 0 auto 48px; text-align: center;">
+      Ou pode aproveitar uma das 15 vagas e parar de fugir de si mesmo.
+    </p>
+    
+    <a href="https://checkout.greenn.com.br/YOUR_LINK" class="btn-primary" style="font-size: 0.9rem; padding: 20px 56px; background: #d4af37; color: #000;">
+      ⚡ QUERO MINHA VAGA AGORA
+    </a>
+  </div>
+</div>
+
+<div class="footer">
+  &copy; 2025 A Ruptura &nbsp;·&nbsp; Hebber Magalhães &nbsp;·&nbsp; @hb.magalhaes
+</div>
+
+<!-- STICKY CTA -->
+<div class="sticky-cta" id="stickyCta">
+  <span class="sticky-price" style="color: #d4af37;">R$ 97</span>
+  <a href="https://checkout.greenn.com.br/YOUR_LINK" class="sticky-btn">🔥 QUERO A RUPTURA</a>
+</div>
+
+<script>
+  const stickyCta = document.getElementById('stickyCta');
+  const priceBox = document.getElementById('preco');
+
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (!entry.isIntersecting) {
+        stickyCta.classList.add('visible');
+      } else {
+        stickyCta.classList.remove('visible');
+      }
+    },
+    { threshold: 0 }
+  );
+
+  observer.observe(priceBox);
+</script>
+
+</body>
+</html>
