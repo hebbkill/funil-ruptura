@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acesso Restrito — A Ruptura</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .capture-wrap {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      position: relative;
+      z-index: 10;
+    }
+    .capture-card {
+      background: rgba(10, 10, 10, 0.95);
+      border: 1px solid var(--border-gold);
+      box-shadow: 0 4px 24px rgba(201,162,39,0.15);
+      border-radius: 12px;
+      padding: 40px 32px;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+    }
+    .capture-icon {
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+    }
+    .capture-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.4rem;
+      color: var(--white);
+      margin-bottom: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .capture-desc {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    .form-group label {
+      display: block;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 0.85rem;
+      color: var(--gold);
+      margin-bottom: 8px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .form-control {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid #333;
+      border-radius: 6px;
+      padding: 14px 16px;
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+    .btn-submit {
+      width: 100%;
+      padding: 16px;
+      background: var(--gold);
+      color: #0A0A0A;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-submit:hover { background: #b89222; }
+    .btn-submit:active { transform: scale(0.98); }
+
+    /* Estado de Loading */
+    .loading-overlay {
+      display: none;
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(10,10,10,0.9);
+      border-radius: 12px;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 20;
+    }
+    .loading-overlay.active { display: flex; }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(201,162,39,0.3);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<div class="scanline-overlay"></div>
+<div class="grid-bg"></div>
+
+<div class="capture-wrap">
+  <div class="capture-card">
+    
+    <div class="loading-overlay" id="loading">
+      <div class="spinner"></div>
+      <p style="color:var(--gold); font-family:'Orbitron',sans-serif; font-size:0.9rem;">DESTRAVANDO ACESSO...</p>
+    </div>
+
+    <div class="capture-icon">🔒</div>
+    <h1 class="capture-title">Acesso Restrito</h1>
+    <p class="capture-desc">
+      A Fase 1 é o início da sua ruptura. Eu não entrego isso para curiosos.<br>
+      Preencha para destravar seu acesso de segurança.
+    </p>
+
+    <form id="capture-form">
+      <div class="form-group">
+        <label for="nome">Seu Nome</label>
+        <input type="text" id="nome" class="form-control" placeholder="Como devo te chamar?" required>
+      </div>
+      <div class="form-group">
+        <label for="whatsapp">WhatsApp</label>
+        <input type="tel" id="whatsapp" class="form-control" placeholder="(DD) 99999-9999" required>
+      </div>
+      <button type="submit" class="btn-submit">DESTRAVAR FASE 1 →</button>
+    </form>
+
+  </div>
+</div>
+
+<script>
+  // ===================================================================
+  // CONFIGURAÇÃO DO GOOGLE FORMS
+  // ===================================================================
+  // 1. Crie um Google Form com duas perguntas de texto curto (Nome e WhatsApp).
+  // 2. Clique no "Olhinho" (Visualizar Form) e copie a URL. Troque /viewform por /formResponse
+  const GOOGLE_FORM_ACTION_URL = "https://docs.google.com/forms/u/0/d/e/SUA_URL_AQUI/formResponse";
+  
+  // 3. Inspecione os campos do seu form e descubra o "name" de cada input (entry.XXXXXXXX)
+  const ENTRY_NOME     = "entry.123456789"; // Substitua pelo ID do campo Nome
+  const ENTRY_WHATSAPP = "entry.987654321"; // Substitua pelo ID do campo WhatsApp
+  // ===================================================================
+
+  document.getElementById('capture-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const nome = document.getElementById('nome').value;
+    const whatsapp = document.getElementById('whatsapp').value;
+    
+    // Ativa o loading
+    document.getElementById('loading').classList.add('active');
+
+    // Se você ainda não configurou o Google Forms, ele apenas redireciona para a Fase 1
+    if (GOOGLE_FORM_ACTION_URL.includes('SUA_URL_AQUI')) {
+      setTimeout(() => { window.location.href = 'fase1.html'; }, 1500);
+      return;
+    }
+
+    // Prepara os dados pro formato do Google
+    const formData = new FormData();
+    formData.append(ENTRY_NOME, nome);
+    formData.append(ENTRY_WHATSAPP, whatsapp);
+
+    // Envia invisivelmente usando no-cors
+    fetch(GOOGLE_FORM_ACTION_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: formData
+    }).then(() => {
+      // Redireciona para a Fase 1 após o sucesso aparente
+      window.location.href = 'fase1.html';
+    }).catch((err) => {
+      console.error(err);
+      // Mesmo com erro de rede, libera a fase pra não travar o usuário
+      window.location.href = 'fase1.html';
+    });
+  });
+</script>
+
+</body>
+</html>

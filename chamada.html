@@ -325,10 +325,14 @@
     </p>
   </div>
 
-  <!-- Dica de áudio -->
+  <!-- Dica de áudio e Legenda -->
   <div style="display:flex; flex-direction:column; align-items:center; width:100%; max-width:300px;">
     <div class="audio-tap" id="audio-tap" onclick="activateAudio()">
       ▶ &nbsp; Toque para ativar o áudio
+    </div>
+    
+    <div id="subtitle-box" style="margin-top: 16px; width: 100%; text-align: center; font-family: 'Inter', sans-serif; font-size: 0.95rem; color: var(--gold); min-height: 44px; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; padding: 0 16px; line-height: 1.4;">
+      [ Transcrevendo sinal... ]
     </div>
   </div>
 
@@ -563,6 +567,95 @@
   function closeExit() {
     document.getElementById('exit-overlay').classList.remove('active');
   }
+
+  /* ─── LEGENDAS SINCRONIZADAS ─── */
+  const subtitles = [
+    { start: 0, text: "Oi, você não conhece essa voz, mas devia, porque é sua." },
+    { start: 4, text: "Eu sou você daqui a 5 anos e eu vim te avisar de uma coisa antes que vire tarde demais." },
+    { start: 10, text: "Antes que eu vire a única versão que sobrou." },
+    { start: 13, text: "Deixa eu te contar como é meu dia." },
+    { start: 15, text: "É o seu dia daqui a algum tempinho." },
+    { start: 17, text: "Eu já acordo cansado, sabe?" },
+    { start: 19, text: "E não é sono, é um peso, como se o dia já tivesse me vencido antes de começar." },
+    { start: 23, text: "A primeira coisa que eu faço é pegar a porra do celular." },
+    { start: 26, text: "E eu rolo, rolo, e vejo a tela, a vida dos outros acontecer, gente que começou junto comigo." },
+    { start: 33, text: "E que foi?" },
+    { start: 34, text: "Enquanto eu fiquei." },
+    { start: 35, text: "Eu passo o dia inteiro fazendo uma coisa que eu nunca sonhei, eu não escolhi." },
+    { start: 39, text: "Olhando pro relógio, esperando dar a hora de ir embora pra fazer... vários nadas." },
+    { start: 45, text: "E o pior nem é isso." },
+    { start: 47, text: "O pior é a pergunta que não se cala." },
+    { start: 49, text: "Se eu tivesse tentado, onde que eu estaria agora?" },
+    { start: 53, text: "Aí chega domingo de noite, né?" },
+    { start: 54, text: "E bate aquele aperto no peito." },
+    { start: 56, text: "Esse aperto que você conhece." },
+    { start: 58, text: "Só que pra você, ainda de vez em quando." },
+    { start: 60, text: "Pra mim, é todo dia." },
+    { start: 62, text: "Porque todo dia virou domingo à noite." },
+    { start: 65, text: "E sabe o que mais me assusta?" },
+    { start: 67, text: "Eu nem sinto mais raiva disso." },
+    { start: 68, text: "Me acostumei." },
+    { start: 70, text: "A pior coisa que pode acontecer com sono não é ele morrer." },
+    { start: 73, text: "É você parar de sentir a falta dele." },
+    { start: 75, text: "E sabe o que mais dói?" },
+    { start: 76, text: "Não foi nenhuma tragédia que me trouxe pra esse buraco sem fundo que eu tô." },
+    { start: 80, text: "Não foi o azar." },
+    { start: 81, text: "Não foram os outros." },
+    { start: 82, text: "Não foi o mundo." },
+    { start: 83, text: "Foi cada vez que eu falei." },
+    { start: 85, text: "Amanhã eu começo." },
+    { start: 87, text: "Foi cada agora." },
+    { start: 88, text: "Não é a hora." },
+    { start: 89, text: "Cada vez que ficou difícil." },
+    { start: 90, text: "E eu pulei fora pra me sentir seguro." },
+    { start: 94, text: "Ninguém me derrubou." },
+    { start: 96, text: "Eu só fui ficando." },
+    { start: 97, text: "Fui me acostumando com pouco." },
+    { start: 98, text: "Fui trocando o que eu queria de verdade." },
+    { start: 101, text: "Pelo que era mais confortável." },
+    { start: 102, text: "E quando eu vi, já era eu." },
+    { start: 104, text: "Já era tarde." },
+    { start: 106, text: "E não falta muito pra o mesmo acontecer com você." },
+    { start: 110, text: "Mas talvez ainda dê tempo." },
+    { start: 112, text: "Talvez você não seja eu." },
+    { start: 113, text: "Talvez ainda tenha alguma vida sobrando aí dentro." },
+    { start: 116, text: "Então prova." },
+    { start: 117, text: "Pra você, não pra mim." },
+    { start: 119, text: "Eu não espero mais nada da vida." },
+    { start: 121, text: "Tá vendo esse teclado aí?" },
+    { start: 122, text: "Aperta o número 1." },
+    { start: 124, text: "Se existe alguma parte de você que se recusa a virar isso que eu sou, é só apertar o número 1." },
+    { start: 135, text: "" }
+  ];
+
+  let currentSubIndex = -1;
+  document.getElementById('call-audio').addEventListener('timeupdate', function() {
+    if (!audioActive || callEnded) return;
+    const currentTime = this.currentTime;
+    let activeIndex = -1;
+
+    for (let i = 0; i < subtitles.length; i++) {
+      if (currentTime >= subtitles[i].start && (!subtitles[i+1] || currentTime < subtitles[i+1].start)) {
+        activeIndex = i;
+        break;
+      }
+    }
+
+    if (activeIndex !== currentSubIndex && activeIndex !== -1) {
+      currentSubIndex = activeIndex;
+      const subBox = document.getElementById('subtitle-box');
+      
+      // Fade out
+      subBox.style.opacity = 0;
+      
+      setTimeout(() => {
+        subBox.innerText = subtitles[activeIndex].text;
+        // Fade in
+        subBox.style.opacity = 1;
+      }, 300);
+    }
+  });
+
 </script>
 
 </body>
