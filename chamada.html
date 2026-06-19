@@ -653,8 +653,7 @@
 
   let currentSubIndex = -1;
   // Ajuste de tempo (em segundos). Valores negativos fazem a legenda aparecer ANTES.
-  // Como estava 2 segundos atrasada (aparecendo depois), vamos adiantar em 1.8 segundos.
-  const timeOffset = 0; 
+  const timeOffset = -0.3; 
 
   document.getElementById('call-audio').addEventListener('timeupdate', function() {
     if (!audioActive || callEnded) return;
